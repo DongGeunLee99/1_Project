@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smhrd.db.MyPMapper">
+
+    <insert id="insertMyPage" parameterType="com.smhrd.model.MyPageDTO">
+        INSERT INTO My_Page (id, polygon, region, category)
+        VALUES (#{id}, ST_GeomFromText(#{polygonWKT}), #{category}, #{region})
+    </insert>
+	
+	<select id="selectMyPageById" parameterType="String" 
+		resultType="com.smhrd.model.MyPageDTO">
+		select id, category, region, ST_AsText(polygon) AS polygonWKT
+		from My_Page where id = #{id}
+	</select>
+	
+	<delete id="deleteMyPage" parameterType="com.smhrd.model.MyPageDTO">
+		delete from My_Page where id = #{id} AND category = #{category} AND region = #{region}
+	</delete>
+</mapper>

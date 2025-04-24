@@ -1,0 +1,468 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    /* ✅ 스크롤 제거 */
+    /* z-index: 1000; */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* 전체 맵 wrapper */
+.map-wrapper {
+    position: relative;
+    /* width: 100vw; */
+    /* height: 100vh; */
+    /* overflow: hidden; */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    width: 100%;
+    /* overflow: hidden;          */
+    box-sizing: border-box;
+    /* padding: 20px; */
+    color: black;
+
+
+}
+
+/* 지도 위에 올라오는 UI 레이어 */
+.ui-overlay {
+    position: fixed;
+    /* absolute에서 fixed로 변경 */
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    /* ✅ 지도보다 위로 */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    pointer-events: none;
+    /*  ✅ 클릭 이벤트는 내부 버튼에만 전달되게 */
+}
+
+.ui-overlay * {
+    pointer-events: auto;
+    /* 내부 요소들은 클릭되도록 */
+}
+
+/* 버튼들이 클릭 가능하게 */
+.ui-overlay button {
+    /* pointer-events: all; */
+    pointer-events: auto;
+}
+
+
+/* 상단 영역 */
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* 좌측 버튼들 */
+.left-buttons {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+/* 우측 버튼 */
+.right-buttons {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+/* 하단 이미지 버튼 */
+.bottom-row {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: auto;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
+/* 버튼 공통 스타일 */
+.Button1 {
+    width: auto;
+    /* ✅ 반응형: 화면 너비의 20% */
+    min-width: 80px;
+    /* 너무 작아지는 것 방지 */
+    padding: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid black;
+    /* 테두리 얇게 */
+    border-radius: 8px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* 부드러운 그림자 */
+}
+
+.Button2 {
+    width: auto;
+    /* ✅ 반응형: 화면 너비의 20% */
+    min-width: 80px;
+    /* 너무 작아지는 것 방지 */
+    padding: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid black;
+    /* 테두리 얇게 */
+    border-radius: 8px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* 부드러운 그림자 */
+}
+
+/* 이미지 버튼 스타일 */
+.bottom-row button {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* 이미지 자체 크기 조정 */
+.image6 {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+}
+
+/* 버튼 스타일 */
+.region-menu {
+    transform: none;         /* ❌ translateX 제거 */
+    top: 100%;               /* ✅ 버튼 아래 */
+    left: 0;
+}
+/* 메뉴 스타일 */
+.category-menu-container {
+    position: absolute;
+    top: 100%;   /* ✅ 버튼 아래 */
+    left: 0;
+    z-index: 10000;
+    display: flex;
+    background-color: white;
+}
+/* 대분류 */
+.category-menu {
+    position: relative;
+    /* ✅ 수평 정렬을 위한 기준점 */
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+
+}
+
+.category-item {
+    position: relative;
+    /* ✅ 중분류의 기준 좌표 */
+}
+
+/* 중분류 */
+.subcategory-menu {
+    position: absolute;
+    /* ✅ 기준은 category-menu */
+    top: 0;
+    left: 100%;
+    /* ✅ 대분류 너비만큼 띄우기 */
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    z-index: 10001;
+}
+
+.subcategory-item {
+    position: relative;
+    /* ✅ 소분류의 기준 좌표 */
+}
+
+/* 소분류 */
+.subsubcategory-menu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    /* ✅ 중분류 너비만큼 추가로 띄우기 */
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    z-index: 10002;
+}
+
+.category-item,
+.subcategory-item,
+.subsubcategory-item {
+    padding: 5px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.category-item:hover,
+.subcategory-item:hover,
+.subsubcategory-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* 카테고리와 지역 버튼 */
+.category-button-wrapper {
+    position: relative;  /* ✅ 기준점 */
+    display: inline-block;
+}
+
+/* 새로운 레이아웃 스타일 */
+.content-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+.map-container {
+    flex: 1;
+    height: 100%;
+    position: relative;
+}
+
+.history-section {
+    width: 300px;
+    background-color: white;
+    border-left: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.history-header {
+    padding: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.history-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #202123;
+}
+
+.history-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.history-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f7f7f8;
+}
+
+.history-icon {
+    margin-right: 12px;
+    font-size: 1.2rem;
+}
+
+.history-text {
+    flex: 1;
+}
+
+.history-category {
+    font-weight: 600;
+    color: #202123;
+}
+
+.history-region {
+    color: #353740;
+}
+
+.history-time {
+    display: block;
+    font-size: 0.8rem;
+    color: #6e6e80;
+    margin-top: 4px;
+}
+
+/* 스크롤바 스타일링 */
+.history-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.history-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.history-content::-webkit-scrollbar-thumb {
+    background: #c5c5d2;
+    border-radius: 4px;
+}
+
+.history-content::-webkit-scrollbar-thumb:hover {
+    background: #a5a5b5;
+}
+
+.real-estate-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.real-estate-container h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.real-estate-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login-buttons {
+    display: flex;
+    gap: 10px;  /* 업종과 지역 버튼 사이의 간격과 동일하게 설정 */
+}
+
+.toggle-container {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 400px;
+    height: calc(100vh - 60px);
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.toggle-content {
+    padding: 20px;
+}
+
+.toggle-content h2 {
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.side-content {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1001;
+}
+
+.side-section {
+    display: flex;
+    transition: transform 0.3s ease;
+}
+
+.side-section.open {
+    transform: translateX(0);
+}
+
+.side-toggle-button {
+    writing-mode: tb-rl;
+    -webkit-writing-mode: vertical-rl;
+    -ms-writing-mode: tb-rl;
+    transform: rotate(180deg);
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 15px 8px;
+    height: auto;
+    min-height: 80px;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    text-align: center;
+    z-index: 1002;
+    transition: transform 0.3s ease;
+}
+
+.side-toggle-button:hover {
+    background-color: #f8f9fa;
+}
+
+.side-toggle-button.active {
+    background-color: #e9ecef;
+    border-left: 3px solid #007bff;
+}
+
+.toggle-container {
+    position: absolute;
+    left: 100%;
+    width: 400px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+}
+
+/* 첫 번째 섹션(상세페이지)이 열려있고 두 번째 섹션(부동산)도 열려있을 때 */
+.side-section:first-child.open + .side-section.open .toggle-container {
+    transform: translateX(400px);
+}
+
+/* 부동산 토글 버튼 스타일 */
+.real-estate-toggle {
+    position: fixed;
+    left: 0;
+    top: 58%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 120px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    font-size: 14px;
+    text-align: center;
+    z-index: 1005;
+}
+
+.real-estate-toggle.active {
+    background-color: #e9ecef;
+    border-left: 3px solid #007bff;
+}
+
+.real-estate-toggle:hover {
+    background-color: #f8f9fa;
+}
